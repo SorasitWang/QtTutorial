@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     clickableLabel.cpp \
+    editpage.cpp \
     homepage.cpp \
     login.cpp \
     main.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     clickableLabel.h \
+    editpage.h \
     homepage.h \
     login.h \
     mainwindow.h \
