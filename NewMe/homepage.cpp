@@ -24,8 +24,9 @@ HomePage::HomePage(QWidget *parent) :
 
     QVBoxLayout *showData = new QVBoxLayout();
 
+    db = new DatabaseHandler(this);
 
-
+    this->db->getAll();
     this->fetchDataFromDb(showData);
     showData->setAlignment(Qt::AlignTop);
     showData->setSpacing(0);
@@ -46,7 +47,7 @@ HomePage::~HomePage()
     delete ui;
 }
 
-void HomePage::addOne(QVector<dataStruct> list,QVBoxLayout *showData,QString name){
+void HomePage::addOne(QVector<DataStruct> list,QVBoxLayout *showData,QString name){
 
 
      QPixmap icon("");
@@ -80,6 +81,9 @@ void HomePage::handleSelect(){
     QPushButton *btn = (QPushButton *)sender();
     QString butVal = btn->objectName();
     this->editPage->change(butVal);
+    DataStruct tmp ;
+    tmp.setValue("SOS","Helloworld","xxx","2023,1,1");
+    db->addOne(tmp);
 
     //printf("%s",butVal.toStdString());
 }
@@ -96,9 +100,12 @@ void HomePage::fetchDataFromDb(QVBoxLayout *showData){
 void HomePage::on_calendarWidget_clicked(const QDate &date)
 {
     QMessageBox::warning(this,"Warning",QString::number(date.year()));
+    ui->calendarWidget->setDateTextFormat(date,*highlight);
+}
 
+void HomePage::receiveRes(QString res){
 
-
-     ui->calendarWidget->setDateTextFormat(date,*highlight);
+    qDebug() << res;
+    qDebug() << res;
 }
 

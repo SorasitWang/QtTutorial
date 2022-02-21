@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     clickableLabel.cpp \
+    databasehandler.cpp \
     editpage.cpp \
     homepage.cpp \
     login.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     clickableLabel.h \
+    databasehandler.h \
     editpage.h \
     homepage.h \
     login.h \

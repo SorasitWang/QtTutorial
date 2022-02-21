@@ -6,18 +6,12 @@
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QPixmap>
+#include "databasehandler.h"
 namespace Ui {
 class HomePage;
 }
 
-struct dataStruct{
-    QString titlle;
-    QString desciption;
-    QString img;
-    QDate created;
-    QDate deadline;
 
-};
 
 class HomePage: public QDialog
 {
@@ -33,14 +27,15 @@ private:
 
     QString selectedData;
     QTextCharFormat *highlight;
-    QVector<dataStruct> listData ;
+    QVector<DataStruct> listData ;
 
-    void addOne(QVector<dataStruct>,QVBoxLayout *showData,QString name);
+    DatabaseHandler *db;
+    void addOne(QVector<DataStruct>,QVBoxLayout *showData,QString name);
     void fetchDataFromDb(QVBoxLayout *showData);
 
 private slots:
     void handleSelect();
-
+    void receiveRes(QString res);
     void on_calendarWidget_clicked(const QDate &date);
 };
 
