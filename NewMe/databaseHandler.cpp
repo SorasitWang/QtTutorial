@@ -19,7 +19,8 @@ void DatabaseHandler::networkReplyReadyRead()
 {
         char *before = "\"";
         char *after = "";
-        QByteArray re = networkReply->readAll().replace(before,after);
+        QString re = networkReply->readAll().replace(before,after);
+
         //qDebug() << networkReply->readAll()[0];
         emit sendRes(re);
 }
@@ -28,6 +29,7 @@ void DatabaseHandler::getAll(){
     QString qurl = QString::fromStdString(url+"test.json");
     this->networkReply = networkManager->
             get(QNetworkRequest(QUrl(qurl)));
+
     connect(networkReply,&QNetworkReply::readyRead,this,&DatabaseHandler::networkReplyReadyRead);
 }
 

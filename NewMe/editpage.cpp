@@ -5,11 +5,10 @@
 
 EditPage::EditPage(Ui::HomePage *u):
     ui(u)
-{
-    QVBoxLayout *layout = new QVBoxLayout();
-    ui->centerWidget->setLayout(layout);
-    this->des = new QLabel("Default");
-    layout->addWidget(this->des);
+{    
+    changeBtnTab();
+    //this->des = new QLabel("Default");
+    //ui->centerLayout->addWidget(this->des);
     //layout->addWidget(new QPushButton());
 }
 
@@ -17,7 +16,54 @@ EditPage::~EditPage()
 {
     delete ui;
 }
-void EditPage::change(QString name){
-    this->des->setText(name);
 
+void EditPage::change(DataStruct focus){
+    //this->des->setText(focus.title);
+    creating = false;
+    changeBtnTab();
 }
+
+void EditPage::createNew(){
+    change(DataStruct());
+    creating = true;
+    changeBtnTab();
+    //set btn
+    //addOne(DataStruct());
+    qDebug() << "add";
+}
+
+void EditPage::changeBtnTab(){
+    if (creating){
+       ui->ok->setText("Add");
+       ui->cancel->setText("Clear");
+    }
+    else{
+        ui->ok->setText("Update");
+        ui->cancel->setText("Delete");
+    }
+}
+
+
+void EditPage::on_cancel_clicked()
+{
+    if (creating){
+        //clear all tmp data
+
+    }
+    else{
+        //delete collection
+    }
+}
+
+
+void EditPage::on_ok_clicked()
+{
+    if (creating){
+        //clear all tmp data
+
+    }
+    else{
+        //delete collection
+    }
+}
+

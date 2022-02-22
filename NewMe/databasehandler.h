@@ -7,28 +7,42 @@
 #include <String>
 
 struct DataStruct{
+    QString id;
     QString title;
     QString description;
     QString img;
     QDate created;
     QDate deadline;
 
-    QList<QString> getKeys(){
-        QList<QString> list = { "title", "description", "img" , "created" , "deadline" };
+    static QList<QString> getKeys(){
+        QList<QString> list = {"id","created","deadline","description","img" ,"title"};
 
         return list;
     }
 
-    void setValue(QString _title,QString _description,QString _img,QString _deadline){
+    void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title,QString _created){
         title = _title;
         description = _description;
         img = _img;
+        id = _id;
 
-        QList<QString> l = _deadline.split(",");
+        QList<QString> l = _deadline.split(".");
         deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
     }
 
+    void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title){
+        title = _title;
+        description = _description;
+        img = _img;
+        id = _id;
+
+        QList<QString> l = _deadline.split(".");
+        deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+        created = QDate::currentDate();
+    }
+
     QString getValue(QString key){
+        if (QString::compare(key,"id")==0) return id;
         if (QString::compare(key,"title")==0) return title;
         if (QString::compare(key,"description")==0) return description;
         if (QString::compare(key,"img")==0) return img;

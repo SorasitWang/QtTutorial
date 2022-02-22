@@ -28,13 +28,15 @@ private:
     QString selectedData;
     QTextCharFormat *highlight;
     QVector<DataStruct> listData ;
-
+    QVBoxLayout *showData;
     DatabaseHandler *db;
-    void addOne(QVector<DataStruct>,QVBoxLayout *showData,QString name);
+    void addOne(DataStruct data);
     void fetchDataFromDb(QVBoxLayout *showData);
+
 
 private slots:
     void handleSelect();
+    void createNew();
     void receiveRes(QString res);
     void on_calendarWidget_clicked(const QDate &date);
 };
