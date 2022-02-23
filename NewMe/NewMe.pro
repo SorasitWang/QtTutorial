@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    calendar.cpp \
     clickableLabel.cpp \
     databasehandler.cpp \
     editpage.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     signup.cpp
 
 HEADERS += \
+    calendar.h \
     clickableLabel.h \
     databasehandler.h \
     editpage.h \

@@ -19,15 +19,14 @@ public:
     void change(DataStruct focus);
     void createNew();
 
+
+
+
 private :
     Ui::HomePage *ui;
     QLabel *des;
     bool creating = true;
     void changeBtnTab();
-
-
-
-
     void on_cancel_clicked();
     void on_ok_clicked();
 };

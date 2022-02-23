@@ -12,6 +12,7 @@
 #include <QScrollArea>
 #include <editpage.h>
 #include <QTextCharFormat>
+#include <Calendar.h>
 
 
 
@@ -25,6 +26,7 @@ HomePage::HomePage(QWidget *parent) :
     showData = new QVBoxLayout();
 
     db = new DatabaseHandler(this);
+    cal = new Calendar(ui);
     QPushButton *addNew = new QPushButton("Empty");
     this->db->getAll();
     this->fetchDataFromDb(showData);
@@ -37,10 +39,10 @@ HomePage::HomePage(QWidget *parent) :
     this->highlight->setUnderlineStyle(QTextCharFormat::SingleUnderline);
 
 
-    ui->calendarWidget->setFixedWidth(ui->tabWidget->height()/1.63);
+
 
     connect(addNew,SIGNAL(clicked()),this,SLOT(createNew()));
-
+    connect(ui->calendarWidget,SIGNAL(clicked(QDate)),this,SLOT(selectDate(QDate)));
 
 
 }
@@ -84,11 +86,6 @@ void HomePage::addOne(DataStruct data){
 void HomePage::handleSelect(){
     QPushButton *btn = (QPushButton *)sender();
     this->editPage->change(listData[btn->objectName().toInt()]);
-
-
-    //db->addOne(tmp);
-
-    //printf("%s",butVal.toStdString());
 }
 
 
@@ -99,19 +96,17 @@ void HomePage::fetchDataFromDb(QVBoxLayout *showData){
     }*/
 }
 
-
-void HomePage::on_calendarWidget_clicked(const QDate &date)
-{
-    QMessageBox::warning(this,"Warning",QString::number(date.year()));
-    ui->calendarWidget->setDateTextFormat(date,*highlight);
+void HomePage::selectDate(QDate date){
+    cal->showDate(date);
 }
 
 void HomePage::receiveRes(QString res){
      QStringList l = res.split(":{");
      QString id;
     QList<QString> keys = DataStruct::getKeys();
+    QMap<QDate,DataStruct> listData;
     id = l[0].sliced(1,l[0].size()-1);
-qDebug() << l[0]<<"/n";
+    qDebug() << l[0]<<"/n";
     int start=0,len=0;
     for (int j=1;j<l.size();j++){
         DataStruct newData;
@@ -134,11 +129,18 @@ qDebug() << l[0]<<"/n";
             id = id.remove(0,2);
         }
         addOne(newData);
-
+        listData[newData.deadline] = newData;
     }
+    cal->update(listData);
+
 }
 
 void HomePage::createNew(){
     this->editPage->createNew();
+}
+
+void HomePage::on_calendarWidget_currentPageChanged(int year, int month){
+
+    cal->changeMonth(month,year);
 }
 

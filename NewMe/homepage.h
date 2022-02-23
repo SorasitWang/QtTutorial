@@ -1,8 +1,10 @@
+
+
 #ifndef HOMEPAGE_H
 #define HOMEPAGE_H
 
 #include "editpage.h"
-
+#include "calendar.h"
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QPixmap>
@@ -24,7 +26,7 @@ public:
 private:
     Ui::HomePage *ui;
     EditPage *editPage;
-
+    Calendar *cal;
     QString selectedData;
     QTextCharFormat *highlight;
     QVector<DataStruct> listData ;
@@ -35,10 +37,12 @@ private:
 
 
 private slots:
+    void selectDate(QDate date);
     void handleSelect();
     void createNew();
     void receiveRes(QString res);
-    void on_calendarWidget_clicked(const QDate &date);
+    void on_calendarWidget_currentPageChanged(int year, int month);
+
 };
 
 #endif // HOMEPAGE_H
