@@ -1,11 +1,12 @@
+
+#ifndef EDITPAGE_H
+#define EDITPAGE_H
 #include "ui_homepage.h"
-#include "HomePage.h"
+//#include "HomePage.h"
 #include <QLabel>
 #include <QPushButton>
 #include <QWidget>
 #include "databasehandler.h"
-#ifndef EDITPAGE_H
-#define EDITPAGE_H
 namespace Ui {
 class HomePage;
 }
@@ -18,6 +19,7 @@ public:
     ~EditPage();
     void change(DataStruct focus);
     void createNew();
+    bool creating = true;
 
 
 
@@ -25,10 +27,11 @@ public:
 private :
     Ui::HomePage *ui;
     QLabel *des;
-    bool creating = true;
+
     void changeBtnTab();
     void on_cancel_clicked();
     void on_ok_clicked();
+
 };
 
 #endif // EDITPAGE_H

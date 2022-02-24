@@ -18,6 +18,9 @@ EditPage::~EditPage()
 }
 
 void EditPage::change(DataStruct focus){
+
+    qDebug() << creating << focus.title;
+
     //this->des->setText(focus.title);
     creating = false;
     changeBtnTab();

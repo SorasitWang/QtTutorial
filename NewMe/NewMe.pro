@@ -30,6 +30,7 @@ HEADERS += \
     signup.h
 
 FORMS += \
+    calendar.ui \
     homepage.ui \
     login.ui \
     mainwindow.ui \

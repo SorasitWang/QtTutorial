@@ -1,6 +1,5 @@
-#include "homepage.h"
-#include "ui_homepage.h"
 
+#include "homepage.h"
 #include <QStandardItem>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -12,7 +11,7 @@
 #include <QScrollArea>
 #include <editpage.h>
 #include <QTextCharFormat>
-#include <Calendar.h>
+
 
 
 
@@ -20,13 +19,14 @@ using namespace std;
 HomePage::HomePage(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::HomePage)
+
 {
     ui->setupUi(this);
 
     showData = new QVBoxLayout();
 
     db = new DatabaseHandler(this);
-    cal = new Calendar(ui);
+    cal = new Calendar(this,ui,new EditPage(ui));
     QPushButton *addNew = new QPushButton("Empty");
     this->db->getAll();
     this->fetchDataFromDb(showData);
@@ -97,7 +97,7 @@ void HomePage::fetchDataFromDb(QVBoxLayout *showData){
 }
 
 void HomePage::selectDate(QDate date){
-    cal->showDate(date);
+    this->cal->showDate(date);
 }
 
 void HomePage::receiveRes(QString res){
@@ -131,7 +131,7 @@ void HomePage::receiveRes(QString res){
         addOne(newData);
         listData[newData.deadline] = newData;
     }
-    cal->update(listData);
+    this->cal->update(listData);
 
 }
 

@@ -22,10 +22,11 @@ class HomePage: public QDialog
 public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
+    EditPage *editPage;
 
 private:
     Ui::HomePage *ui;
-    EditPage *editPage;
+
     Calendar *cal;
     QString selectedData;
     QTextCharFormat *highlight;
