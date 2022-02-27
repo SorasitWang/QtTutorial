@@ -20,6 +20,7 @@ EditPage::~EditPage()
 void EditPage::change(DataStruct focus){
 
     qDebug() << creating << focus.title;
+    setPercent(focus.percent);
 
     //this->des->setText(focus.title);
     creating = false;
@@ -30,6 +31,8 @@ void EditPage::createNew(){
     change(DataStruct());
     creating = true;
     changeBtnTab();
+    setPercent(0);
+
     //set btn
     //addOne(DataStruct());
     qDebug() << "add";
@@ -72,5 +75,17 @@ void EditPage::on_ok_clicked()
 
 
 
+
+
+
+void EditPage::editProgress(int value){
+    qDebug()<<value;
+     ui->progressBar->setValue(value);
+}
+
+void EditPage::setPercent(int value){
+    ui->progressBar->setValue(value);
+    ui->slideProgress->setValue(value);
+}
 
 

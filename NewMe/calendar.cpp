@@ -84,6 +84,7 @@ Calendar::~Calendar(){
       }
 
       if (!monthData.contains(QPair<int,int>(m,y))){
+          ui->inMonth->setText("None");
           return ;
       }
 
@@ -91,6 +92,8 @@ Calendar::~Calendar(){
       for (int i=0;i<dataM.size();i++){
           initBtn(dataM[i],i);
       }
+      ui->inMonth->setText("Total : "+QString::number(dataM.size()));
+
   }
 
 

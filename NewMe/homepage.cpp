@@ -43,6 +43,7 @@ HomePage::HomePage(QWidget *parent) :
 
     connect(addNew,SIGNAL(clicked()),this,SLOT(createNew()));
     connect(ui->calendarWidget,SIGNAL(clicked(QDate)),this,SLOT(selectDate(QDate)));
+    //connect(ui->slideProgress,SIGNAL(valueChanged(value)),this,SLOT(editProgress(value)));
 
 
 }
@@ -123,7 +124,7 @@ void HomePage::receiveRes(QString res){
             dataL.append(l[j].sliced(start,len-1-start));
 
         }
-        newData.setValue(id,dataL.at(1),dataL.at(2),dataL.at(3),dataL.at(4),dataL.at(0));
+        newData.setValue(id,dataL.at(1),dataL.at(2),dataL.at(3),dataL.at(4),dataL.at(5),dataL.at(0));
         if (j!=l.size()-1){
             id = l[j].sliced(l[j].indexOf("},"),l[j].size()-l[j].indexOf("},"));
             id = id.remove(0,2);
@@ -143,4 +144,3 @@ void HomePage::on_calendarWidget_currentPageChanged(int year, int month){
 
     cal->changeMonth(month,year);
 }
-

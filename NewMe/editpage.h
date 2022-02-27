@@ -19,7 +19,9 @@ public:
     ~EditPage();
     void change(DataStruct focus);
     void createNew();
+    void editProgress(int value);
     bool creating = true;
+
 
 
 
@@ -31,7 +33,7 @@ private :
     void changeBtnTab();
     void on_cancel_clicked();
     void on_ok_clicked();
-
+    void setPercent(int value);
 };
 
 #endif // EDITPAGE_H

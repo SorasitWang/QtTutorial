@@ -13,28 +13,31 @@ struct DataStruct{
     QString img;
     QDate created;
     QDate deadline;
+    int percent;
 
     static QList<QString> getKeys(){
-        QList<QString> list = {"id","created","deadline","description","img" ,"title"};
+        QList<QString> list = {"id","created","deadline","description","img" ,"title","percent"};
 
         return list;
     }
 
-    void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title,QString _created){
+    void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title,QString _percent,QString _created){
         title = _title;
         description = _description;
         img = _img;
         id = _id;
+        percent = _percent.toInt();
 
         QList<QString> l = _deadline.split(".");
         deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
     }
 
-    void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title){
+    void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title,QString _percent){
         title = _title;
         description = _description;
         img = _img;
         id = _id;
+        percent = _percent.toInt();
 
         QList<QString> l = _deadline.split(".");
         deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
@@ -48,6 +51,7 @@ struct DataStruct{
         if (QString::compare(key,"img")==0) return img;
         if (QString::compare(key,"created")==0) return created.toString("dd.MM.yyyy");
         if (QString::compare(key,"deadline")==0) return deadline.toString("dd.MM.yyyy");
+        if (QString::compare(key,"percent")==0) return QString::number(percent);
     }
 };
 
