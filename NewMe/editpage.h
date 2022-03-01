@@ -21,6 +21,7 @@ public:
     void createNew();
     void editProgress(int value);
     bool creating = true;
+    bool editing = true;
 
 
 
@@ -29,6 +30,7 @@ public:
 private :
     Ui::HomePage *ui;
     QLabel *des;
+    DataStruct now;
 
     void changeBtnTab();
     void on_cancel_clicked();

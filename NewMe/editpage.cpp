@@ -18,12 +18,23 @@ EditPage::~EditPage()
 }
 
 void EditPage::change(DataStruct focus){
-
-    qDebug() << creating << focus.title;
-    setPercent(focus.percent);
+    now = focus;
+    qDebug() << focus.created.toString() << focus.title;
+    setPercent(now.percent);
+    ui->title->setText(focus.title);
+    ui->title->setFrame(false);
+    ui->title->setReadOnly(true);
+    ui->startDate->setText(focus.created.toString());
+    ui->dateEdit->setDate(focus.deadline);
+    ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    ui->dateEdit->setReadOnly(true);
+    ui->descriptionPlain->setPlainText(focus.description);
+    ui->descriptionPlain->setReadOnly(true);
+    ui->slideProgress->setVisible(false);
 
     //this->des->setText(focus.title);
     creating = false;
+    editing = false;
     changeBtnTab();
 }
 
@@ -32,7 +43,6 @@ void EditPage::createNew(){
     creating = true;
     changeBtnTab();
     setPercent(0);
-
     //set btn
     //addOne(DataStruct());
     qDebug() << "add";
@@ -46,6 +56,15 @@ void EditPage::changeBtnTab(){
     else{
         ui->ok->setText("Update");
         ui->cancel->setText("Delete");
+    }
+
+    if (creating || editing){
+        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        ui->dateEdit->setReadOnly(false);
+        ui->descriptionPlain->setReadOnly(false);
+        ui->title->setReadOnly(false);
+        ui->title->setFrame(true);
+        ui->slideProgress->setVisible(true);
     }
 }
 

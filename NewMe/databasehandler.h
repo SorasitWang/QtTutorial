@@ -28,8 +28,12 @@ struct DataStruct{
         id = _id;
         percent = _percent.toInt();
 
+
         QList<QString> l = _deadline.split(".");
         deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+        l = _created.split(".");
+        created = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+
     }
 
     void setValue(QString _id,QString _deadline,QString _description,QString _img,QString _title,QString _percent){

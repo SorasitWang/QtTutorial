@@ -124,6 +124,7 @@ void HomePage::receiveRes(QString res){
             dataL.append(l[j].sliced(start,len-1-start));
 
         }
+
         newData.setValue(id,dataL.at(1),dataL.at(2),dataL.at(3),dataL.at(4),dataL.at(5),dataL.at(0));
         if (j!=l.size()-1){
             id = l[j].sliced(l[j].indexOf("},"),l[j].size()-l[j].indexOf("},"));
