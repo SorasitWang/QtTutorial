@@ -43,6 +43,8 @@ private slots:
     void createNew();
     void receiveRes(QString res);
     void on_calendarWidget_currentPageChanged(int year, int month);
+    void cancel();
+    void ok();
 
 };
 

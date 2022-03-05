@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>res/healthy.png</file>
+        <file>res/money.png</file>
+        <file>res/study.png</file>
+    </qresource>
+</RCC>

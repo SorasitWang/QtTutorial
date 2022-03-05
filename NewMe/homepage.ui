@@ -162,20 +162,20 @@ background-color: rgb(243, 243, 243);</string>
              <string/>
             </property>
            </widget>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="icon">
             <property name="geometry">
              <rect>
-              <x>10</x>
+              <x>20</x>
               <y>50</y>
-              <width>111</width>
-              <height>111</height>
+              <width>101</width>
+              <height>91</height>
              </rect>
             </property>
             <property name="frameShape">
-             <enum>QFrame::Box</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string/>
             </property>
            </widget>
            <widget class="QWidget" name="verticalLayoutWidget_5">
@@ -192,8 +192,14 @@ background-color: rgb(243, 243, 243);</string>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
                 <widget class="QLabel" name="label_4">
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
                  <property name="text">
-                  <string>Start :</string>
+                  <string>Start </string>
                  </property>
                 </widget>
                </item>
@@ -210,6 +216,12 @@ background-color: rgb(243, 243, 243);</string>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
                 <widget class="QLabel" name="label_3">
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>DeadLine</string>
                  </property>
@@ -297,6 +309,22 @@ background-color: rgb(243, 243, 243);</string>
               </spacer>
              </item>
             </layout>
+           </widget>
+           <widget class="QComboBox" name="type">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>150</y>
+              <width>101</width>
+              <height>26</height>
+             </rect>
+            </property>
+            <property name="editable">
+             <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>selectType</string>
+            </property>
            </widget>
           </widget>
          </item>

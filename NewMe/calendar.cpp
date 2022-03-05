@@ -10,6 +10,8 @@ Calendar::Calendar(QWidget *parent,Ui::HomePage *u,EditPage *e) :
     ui->calendarWidget->setFixedWidth(ui->tabWidget->height()/1.63);
       ui->showMonth->setAlignment(Qt::AlignTop);
       ui->showMonth->setSpacing(0);
+
+      //changeMonth(ui->calendarWidget->monthShown(),ui->calendarWidget->yearShown());
       //connect(ui->calendarWidget,SLOT(clicked(QDate)),this,SIGNAL(on_calendarWidget_clicked(QDate)));
   }
 
@@ -42,7 +44,9 @@ Calendar::~Calendar(){
                monthData[my] = QList<DataStruct>();
           monthData[my].append(_listData[keys[i]]);
       }
+
       listData = _listData;
+      changeMonth(ui->calendarWidget->monthShown(),ui->calendarWidget->yearShown());
   }
 
   void Calendar::initBtn(DataStruct data,int idx){
@@ -62,7 +66,7 @@ Calendar::~Calendar(){
       int y = ui->calendarWidget->yearShown();
       QList<DataStruct> sameMonth = monthData[QPair<int,int>(m,y)];
       qDebug() << sameMonth.at(name[1].toInt()).title;
-      editPage->change(sameMonth.at(name[1].toInt()));
+      editPage->change(sameMonth.at(name[1].toInt()),false);
   }
   void Calendar::showDate(QDate date){
       if (listData.contains(date)){
@@ -83,15 +87,17 @@ Calendar::~Calendar(){
           delete child->widget();
       }
 
+      //if no sol in this month, show "None"
       if (!monthData.contains(QPair<int,int>(m,y))){
           ui->inMonth->setText("None");
           return ;
       }
-
+      //init button in sol list
       QList<DataStruct> dataM = monthData[QPair<int,int>(m,y)];
       for (int i=0;i<dataM.size();i++){
           initBtn(dataM[i],i);
       }
+      //show total sol
       ui->inMonth->setText("Total : "+QString::number(dataM.size()));
 
   }

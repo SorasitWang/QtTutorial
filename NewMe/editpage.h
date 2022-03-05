@@ -17,12 +17,15 @@ public:
 
     explicit EditPage(Ui::HomePage *ui);
     ~EditPage();
-    void change(DataStruct focus);
+    void change(DataStruct focus,bool isClear);
     void createNew();
     void editProgress(int value);
     bool creating = true;
     bool editing = true;
 
+    void cancel();
+    void ok();
+    void setType();
 
 
 
@@ -31,7 +34,7 @@ private :
     Ui::HomePage *ui;
     QLabel *des;
     DataStruct now;
-
+    QPixmap icon;
     void changeBtnTab();
     void on_cancel_clicked();
     void on_ok_clicked();

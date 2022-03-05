@@ -43,6 +43,10 @@ HomePage::HomePage(QWidget *parent) :
 
     connect(addNew,SIGNAL(clicked()),this,SLOT(createNew()));
     connect(ui->calendarWidget,SIGNAL(clicked(QDate)),this,SLOT(selectDate(QDate)));
+    connect(ui->cancel,SIGNAL(clicked()),this,SLOT(cancel()));
+    connect(ui->ok,SIGNAL(clicked()),this,SLOT(ok()));
+
+    editPage->setType();
     //connect(ui->slideProgress,SIGNAL(valueChanged(value)),this,SLOT(editProgress(value)));
 
 
@@ -53,6 +57,10 @@ HomePage::~HomePage()
     delete ui;
 }
 
+void HomePage::ok(){
+    editPage->ok();
+
+}
 
 void HomePage::addOne(DataStruct data){
 
@@ -86,7 +94,7 @@ void HomePage::addOne(DataStruct data){
 
 void HomePage::handleSelect(){
     QPushButton *btn = (QPushButton *)sender();
-    this->editPage->change(listData[btn->objectName().toInt()]);
+    this->editPage->change(listData[btn->objectName().toInt()],false);
 }
 
 
@@ -144,4 +152,8 @@ void HomePage::createNew(){
 void HomePage::on_calendarWidget_currentPageChanged(int year, int month){
 
     cal->changeMonth(month,year);
+}
+
+void HomePage::cancel(){
+    editPage->cancel();
 }
