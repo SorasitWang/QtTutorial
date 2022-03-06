@@ -26,6 +26,7 @@ public:
     void cancel();
     void ok();
     void setType();
+    void changeType(QString type);
 
 
 

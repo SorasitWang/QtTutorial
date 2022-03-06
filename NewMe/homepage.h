@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QPixmap>
+#include <Stat.h>
 #include "databasehandler.h"
 namespace Ui {
 class HomePage;
@@ -26,7 +27,7 @@ public:
 
 private:
     Ui::HomePage *ui;
-
+    Stat *stat;
     Calendar *cal;
     QString selectedData;
     QTextCharFormat *highlight;
@@ -45,6 +46,7 @@ private slots:
     void on_calendarWidget_currentPageChanged(int year, int month);
     void cancel();
     void ok();
+    void changeType(QString txt);
 
 };
 

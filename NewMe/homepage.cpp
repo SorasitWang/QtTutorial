@@ -11,6 +11,7 @@
 #include <QScrollArea>
 #include <editpage.h>
 #include <QTextCharFormat>
+#include <QString>
 
 
 
@@ -24,7 +25,7 @@ HomePage::HomePage(QWidget *parent) :
     ui->setupUi(this);
 
     showData = new QVBoxLayout();
-
+    stat = new Stat(ui);
     db = new DatabaseHandler(this);
     cal = new Calendar(this,ui,new EditPage(ui));
     QPushButton *addNew = new QPushButton("Empty");
@@ -45,7 +46,7 @@ HomePage::HomePage(QWidget *parent) :
     connect(ui->calendarWidget,SIGNAL(clicked(QDate)),this,SLOT(selectDate(QDate)));
     connect(ui->cancel,SIGNAL(clicked()),this,SLOT(cancel()));
     connect(ui->ok,SIGNAL(clicked()),this,SLOT(ok()));
-
+    connect(ui->type,SIGNAL(currentTextChanged(QString)),this,SLOT(changeType(QString)));
     editPage->setType();
     //connect(ui->slideProgress,SIGNAL(valueChanged(value)),this,SLOT(editProgress(value)));
 
@@ -142,6 +143,8 @@ void HomePage::receiveRes(QString res){
         listData[newData.deadline] = newData;
     }
     this->cal->update(listData);
+    this->stat->update(listData.values());
+    this->stat->update(listData.values());
 
 }
 
@@ -154,6 +157,9 @@ void HomePage::on_calendarWidget_currentPageChanged(int year, int month){
     cal->changeMonth(month,year);
 }
 
+void HomePage::changeType(QString txt){
+    editPage->changeType(txt);
+}
 void HomePage::cancel(){
     editPage->cancel();
 }

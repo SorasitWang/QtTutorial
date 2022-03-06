@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui network charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,7 +17,8 @@ SOURCES += \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
-    signup.cpp
+    signup.cpp \
+    stat.cpp
 
 HEADERS += \
     calendar.h \
@@ -27,7 +28,8 @@ HEADERS += \
     homepage.h \
     login.h \
     mainwindow.h \
-    signup.h
+    signup.h \
+    stat.h
 
 FORMS += \
     calendar.ui \

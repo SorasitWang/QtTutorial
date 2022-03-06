@@ -30,7 +30,7 @@ void DatabaseHandler::networkReplyReadyRead()
 void DatabaseHandler::getAll(){
     char *before = "\"";
     char *after = "";
-    QString re = "{\"1\":{\"created\":\"2022.5.3\",\"deadline\":\"2022.10.3\",\"description\":\"for pat1!\",\"type\":\"Study\",\"title\":\"Study\",\"percent\":\"55\"},\"-MwQSbfiycW0amw7zHCZ\":{\"created\":\"2022.02.02\",\"deadline\":\"2023.01.01\",\"description\":\"Helloworld\",\"type\":\"Healthy\",\"title\":\"SOS\",\"percent\":\"75\"},\"-MwQgJIEAmiMnBbUt6Bt\":{\"created\":\"2022.02.22\",\"deadline\":\"2022.03.03\",\"description\":\"Helloworld\",\"type\":\"Money\",\"title\":\"SOS\",\"percent\":\"90\"}}";
+    QString re = "{\"1\":{\"created\":\"2022.5.3\",\"deadline\":\"2022.10.3\",\"description\":\"for pat1!\",\"type\":\"Money\",\"title\":\"Study\",\"percent\":\"55\"},\"-MwQSbfiycW0amw7zHCZ\":{\"created\":\"2022.02.02\",\"deadline\":\"2023.01.01\",\"description\":\"Helloworld\",\"type\":\"Healthy\",\"title\":\"SOS\",\"percent\":\"75\"},\"-MwQgJIEAmiMnBbUt6Bt\":{\"created\":\"2022.02.22\",\"deadline\":\"2022.03.03\",\"description\":\"Helloworld\",\"type\":\"Money\",\"title\":\"SOS\",\"percent\":\"90\"}}";
     re = re.replace(before,after);
     emit sendRes(re);
 

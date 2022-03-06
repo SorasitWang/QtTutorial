@@ -131,7 +131,10 @@ void EditPage::setType(){
 
 }
 
-
+void EditPage::changeType(QString type){
+     icon = QPixmap(":/icon/res/"+type.toLower()+".png");
+     ui->icon->setPixmap(icon.scaled(ui->icon->width(),ui->icon->height(),Qt::KeepAspectRatio));
+}
 
 
 
