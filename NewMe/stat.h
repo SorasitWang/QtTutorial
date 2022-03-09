@@ -6,6 +6,8 @@
 #include <QPieSlice>
 #include <QPieSeries>
 #include <QChartView>
+#include <QHorizontalStackedBarSeries>
+#include <QBarCategoryAxis>
 
 namespace Ui {
 class HomePage;
@@ -22,11 +24,14 @@ private :
     Ui::HomePage *ui;
     QFont *label;
     QList<DataStruct> data;
-    QPieSeries *series;
-    QMap<QString,int> cat;
+    QPieSeries *pieSeries;
+
+    QHorizontalStackedBarSeries *barSeries;
+    QBarCategoryAxis *axis;
+    QMap<QString,QPair<int,int>> cat;
     QList<QPieSlice> *slices;
-    QChart *chart;
-    QChartView *chartView;
+    QChart *pieChart , *barChart;
+    QChartView *pieChartView , *barChartView;
 
 };
 

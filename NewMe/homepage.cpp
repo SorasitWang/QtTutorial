@@ -27,7 +27,7 @@ HomePage::HomePage(QWidget *parent) :
     showData = new QVBoxLayout();
     stat = new Stat(ui);
     db = new DatabaseHandler(this);
-    cal = new Calendar(this,ui,new EditPage(ui));
+    cal = new Calendar(this,ui,new EditPage(ui,db));
     QPushButton *addNew = new QPushButton("Empty");
     this->db->getAll();
     this->fetchDataFromDb(showData);
@@ -35,17 +35,18 @@ HomePage::HomePage(QWidget *parent) :
     showData->setAlignment(Qt::AlignTop);
     showData->setSpacing(0);
     ui->scrollAreaWidgetContents_6->setLayout(showData);
-    this->editPage =new EditPage(ui);
+    this->editPage =new EditPage(ui,db);
     this->highlight = new QTextCharFormat();
     this->highlight->setUnderlineStyle(QTextCharFormat::SingleUnderline);
 
 
 
 
+
     connect(addNew,SIGNAL(clicked()),this,SLOT(createNew()));
     connect(ui->calendarWidget,SIGNAL(clicked(QDate)),this,SLOT(selectDate(QDate)));
-    connect(ui->cancel,SIGNAL(clicked()),this,SLOT(cancel()));
-    connect(ui->ok,SIGNAL(clicked()),this,SLOT(ok()));
+    connect(ui->cancel,SIGNAL(released()),this,SLOT(cancel()));
+    connect(ui->ok,SIGNAL(released()),this,SLOT(ok()));
     connect(ui->type,SIGNAL(currentTextChanged(QString)),this,SLOT(changeType(QString)));
     editPage->setType();
     //connect(ui->slideProgress,SIGNAL(valueChanged(value)),this,SLOT(editProgress(value)));
@@ -59,6 +60,9 @@ HomePage::~HomePage()
 }
 
 void HomePage::ok(){
+    qDebug()<<"OK" << num;
+    num+=1;
+
     editPage->ok();
 
 }
@@ -69,24 +73,35 @@ void HomePage::addOne(DataStruct data){
      QPixmap icon("");
      QPushButton *bBtn = new QPushButton();
 
-    QLabel *img = new QLabel();
-    img->setPixmap(icon);
+    QLabel *title = new QLabel(data.title);
+    QLabel *type = new QLabel(data.type);
 
-   QLabel *des = new QLabel(data.description);
+    QDate now =  QDate::currentDate();
+    int daysLeft = now.daysTo(data.deadline);
+    QString daysLeftTxt ;
+    if (daysLeft <0)
+        daysLeftTxt = "Already passed";
+    else
+        daysLeftTxt= QString::number(daysLeft)+QString(" days left");
+    QLabel *deadline = new QLabel(daysLeftTxt);
     QPushButton *dataClick = new QPushButton();
     dataClick->setObjectName(QString::number(listData.size()-1));
     connect(dataClick, SIGNAL(released()), this, SLOT(handleSelect()));
     //QFrame *dataFrame = new QFrame(dataClick);
 
-
+    QProgressBar *percent = new QProgressBar();
+    percent->setValue(data.percent);
+    percent->setTextVisible(false);
+    percent->setFixedWidth(150);
      showData->insertWidget(-1,dataClick);
 
 
     QGridLayout *layoutData = new QGridLayout(dataClick);
     dataClick->setFixedHeight(100);
-    layoutData->addWidget(img,0,0,2,1);
-    layoutData->addWidget(bBtn,1,1,1,1);
-    layoutData->addWidget(des,2,0,1,2);
+    layoutData->addWidget(title,0,0);
+    layoutData->addWidget(percent,1,1);
+    layoutData->addWidget(type,1,0);
+    layoutData->addWidget(deadline,0,1);
     layoutData->setSpacing(0);
 
 
@@ -143,8 +158,8 @@ void HomePage::receiveRes(QString res){
         listData[newData.deadline] = newData;
     }
     this->cal->update(listData);
-    this->stat->update(listData.values());
-    this->stat->update(listData.values());
+    //this->stat->update(listData.values());
+    //this->stat->update(listData.values());
 
 }
 

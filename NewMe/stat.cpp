@@ -4,13 +4,17 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
 
+#include <QBarCategoryAxis>
+#include <QBarSet>
+#include <QValueAxis>
+
 Stat::Stat(Ui::HomePage *u):
     ui(u)
 {
     //update();
     label = new QFont();
     label->setPointSize(7);
-    this->series = new QPieSeries();
+    this->pieSeries = new QPieSeries();
     //series->append("Vegerables",.40);
     /*series->append("Beans",.20);
     series->append("Fruit",.15);
@@ -34,51 +38,123 @@ Stat::Stat(Ui::HomePage *u):
     slice4->setLabelVisible();
     slice4->setLabelFont(*label);*/
 
-    chart = new QChart();
-    chart->addSeries(series);
-    chart->setTitle("What Mek ate this week");
-    chart->legend()->hide();
+    pieChart = new QChart();
+    pieChart->addSeries(pieSeries);
+    pieChart->setTitle("What Mek ate this week");
+    pieChart->legend()->hide();
 
-    chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+    pieChartView = new QChartView(pieChart);
+    pieChartView->setRenderHint(QPainter::Antialiasing);
+
 
     /*QChartView *chartView1 = new QChartView(chart);
     chartView1->setRenderHint(QPainter::Antialiasing);*/
     //chartView->setParent(ui->statWidget1);
-    ui->statLayout->addWidget(chartView);
-    //ui->statLayout->addWidget(chartView1);
+    ui->statLayout->addWidget(pieChartView);
 
 
+    barSeries = new QHorizontalStackedBarSeries();
+    //create chart
+    barChart = new QChart();
+   // barChart->addSeries(barSeries);
+    barChart->setTitle("Progress");
+    barChart->setAnimationOptions(QChart::AllAnimations);
+
+    //QValueAxis *axisY = new QValueAxis();
+   //axisY->setRange(0,100);
+   //barChart->addAxis(axisY, Qt::AlignBottom);
+   //barSeries->attachAxis(axisY);
+
+   //barChart->axes(Qt::Vertical).first()->setRange(0,100 * 2);
+    //axis
+    axis = new QBarCategoryAxis();
+    barChart->createDefaultAxes();
+    //barChart->axes(Qt::Vertical).first()->setRange(0,100 * 2);
+    //QValueAxis *axisY = qobject_cast<QValueAxis*>(barChart->axes(Qt::Vertical).first());
+    //Q_ASSERT(axisY);
+    //axisY->setLabelFormat("%.1f  ");
+    //barChart->axes(Qt::Vertical).at(0)->setRange(0.0f,100.0f);
+    //label,series
+   // barChart->addAxis(axis,Qt::AlignLeft);
+    barChart->addSeries(barSeries);
+    barChart->legend()->setVisible(false);
+
+    //display
+    barChartView = new QChartView(barChart);
+    barChartView->setRenderHint(QPainter::Antialiasing);
+
+   ui->statLayout->addWidget(barChartView);
 }
 
 void Stat::update(QList<DataStruct> listData){
     QString type;
     int total = listData.size();
+    int percent = 0;
     cat.clear();
     for (int i=0;i<total;i++){
         type = listData.at(i).type;
-        if (this->cat.value(type) == NULL){
-            this->cat[type] = 1;
+        percent = listData.at(i).percent;
+        if (this->cat.value(type).first == NULL){
+            this->cat[type].first = 1;
+            this->cat[type].second = percent;
         }
         else{
-             this->cat[type] += 1;
+            this->cat[type].first += 1;
+            this->cat[type].second += percent;
         }
     }
-    series->clear();
+
+    //pie chart
+    pieSeries->clear();
     for (int i=0;i<cat.keys().size();i++){
-        series->append(cat.keys()[i],cat[cat.keys()[i]]);
-        QPieSlice *slice = series->slices().at(i);
+        pieSeries->append(cat.keys()[i],cat[cat.keys()[i]].first);
+        QPieSlice *slice = pieSeries->slices().at(i);
         slice->setLabelVisible();
         slice->setLabelFont(*label);
     }
-    //QChart *chart = new QChart();
-    /*chart->removeAllSeries();
-    chart->addSeries(series);*/
-    //chart->setTitle("What Mek ate this week");
-    //chart->legend()->hide();
 
-    //QChartView *chartView = new QChartView(chart);
-    //chartView->setRenderHint(QPainter::Antialiasing);*/
 
-    qDebug() << "cat" << cat;
+    //line
+    barSeries = new QHorizontalStackedBarSeries();
+    barChart->removeAllSeries();
+    //barChart->removeAllSeries();
+    barChart->removeAxis(axis);
+    QStringList labelAxis;
+    QList<QBarSet*> lBarSet;
+    //barSeries->clear();
+    QBarSet *max = new QBarSet("MAX");
+   // max->set
+    //max->append(100);
+    //barSeries->append(max);
+    //labelAxis.append("MAX");
+    for (int i=0;i<cat.keys().size();i++){
+        labelAxis.append(cat.keys()[i]);
+        lBarSet.append(new QBarSet(cat.keys()[i]));
+        for (int j=0;j<cat.keys().size();j++){
+            int val = int(cat[cat.keys()[i]].second / cat[cat.keys()[i]].first);
+            if (i==j)lBarSet[i]->append(val);
+            else lBarSet[i]->append(0);
+        }
+
+        barSeries->append(lBarSet.at(i));
+    }
+
+    axis->clear();
+    axis->append(labelAxis);
+    //create series*/
+    //barChart->createDefaultAxes();
+    //barChart->setAxisY(axis,barSeries);
+    //QValueAxis *axisY = new QValueAxis();
+   //axisY->setRange(0,100);
+   //axisY->setMax(100);
+   //barChart->addAxis(axisY, Qt::AlignBottom);
+   //barSeries->attachAxis(axisY);
+    //barChart->addAxis(axis,Qt::AlignLeft);
+    //barSeries->attachAxis(axis);
+    barChart->addSeries(barSeries);
+
+
+    //barChart->createDefaultAxes();
+
+    //qDebug() << ;
 }

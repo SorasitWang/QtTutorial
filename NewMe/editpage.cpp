@@ -3,8 +3,8 @@
 
 
 
-EditPage::EditPage(Ui::HomePage *u):
-    ui(u)
+EditPage::EditPage(Ui::HomePage *u,DatabaseHandler *d):
+    ui(u),db(d)
 {    
     changeBtnTab();
 
@@ -22,16 +22,9 @@ void EditPage::change(DataStruct focus,bool isClear){
     now = focus;
     qDebug() << focus.type << focus.title;
     if (!isClear){
-
+        readOnly(true);
         icon = QPixmap(":/icon/res/"+focus.type.toLower()+".png");
-        ui->icon->setPixmap(icon.scaled(ui->icon->width(),ui->icon->height(),Qt::KeepAspectRatio));
-        ui->title->setFrame(false);
-        ui->title->setReadOnly(true);
-        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
-        ui->descriptionPlain->setReadOnly(true);
-        ui->slideProgress->setVisible(false);
-        ui->dateEdit->setReadOnly(true);
-        ui->type->setEnabled(false);
+
         creating = false;
         editing = false;
 
@@ -67,11 +60,14 @@ void EditPage::changeBtnTab(){
        ui->cancel->setText("Clear");
     }
     else{
-        if (!editing)
+        if (!editing){
             ui->ok->setText("Edit");
-        else
+            ui->cancel->setText("Delete");
+        }
+        else{
             ui->ok->setText("Update");
-        ui->cancel->setText("Delete");
+            ui->cancel->setText("Exit");
+        }
     }
 
     if (creating || editing){
@@ -86,14 +82,25 @@ void EditPage::changeBtnTab(){
 }
 
 void EditPage::cancel(){
+
     if (creating){
         //clear all tmp data
         change(DataStruct(),true);
 
     }
     else{
-        //delete collection
+
+        if (editing){
+            //cancel collection
+            change(now,false);
+        }
+        else{
+            //delete collection
+            changeBtnTab();
+        }
+        editing = !editing;
     }
+
 }
 
 void EditPage::ok(){
@@ -108,9 +115,13 @@ void EditPage::ok(){
     }
     else{
         //change ui to edit mode
+        readOnly(false);
+
+
 
     }
     editing = !editing;
+    changeBtnTab();
 }
 
 void EditPage::on_ok_clicked()
@@ -146,6 +157,28 @@ void EditPage::editProgress(int value){
 void EditPage::setPercent(int value){
     ui->progressBar->setValue(value);
     ui->slideProgress->setValue(value);
+}
+
+void EditPage::readOnly(bool t){
+    if(t){
+        ui->icon->setPixmap(icon.scaled(ui->icon->width(),ui->icon->height(),Qt::KeepAspectRatio));
+        ui->title->setFrame(false);
+        ui->title->setReadOnly(true);
+        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        ui->descriptionPlain->setReadOnly(true);
+        ui->slideProgress->setVisible(false);
+        ui->dateEdit->setReadOnly(true);
+        ui->type->setEnabled(false);
+    }
+    else{
+        ui->descriptionPlain->setReadOnly(false);
+        ui->title->setReadOnly(false);
+        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        ui->dateEdit->setReadOnly(false);
+        ui->type->setEnabled(true);
+        ui->slideProgress->setVisible(true);
+        ui->title->setFrame(true);
+    }
 }
 
 

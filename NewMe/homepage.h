@@ -37,6 +37,8 @@ private:
     void addOne(DataStruct data);
     void fetchDataFromDb(QVBoxLayout *showData);
 
+    int num=0;
+
 
 private slots:
     void selectDate(QDate date);

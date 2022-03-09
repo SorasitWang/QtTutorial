@@ -15,14 +15,14 @@ class EditPage
 {
 public:
 
-    explicit EditPage(Ui::HomePage *ui);
+    explicit EditPage(Ui::HomePage *ui,DatabaseHandler *db);
     ~EditPage();
     void change(DataStruct focus,bool isClear);
     void createNew();
     void editProgress(int value);
     bool creating = true;
     bool editing = true;
-
+    void readOnly(bool t);
     void cancel();
     void ok();
     void setType();
@@ -36,6 +36,7 @@ private :
     QLabel *des;
     DataStruct now;
     QPixmap icon;
+    DatabaseHandler *db;
     void changeBtnTab();
     void on_cancel_clicked();
     void on_ok_clicked();

@@ -65,16 +65,17 @@ class DatabaseHandler : public QObject
 public:
     DatabaseHandler(QObject *parent = nullptr);
     ~DatabaseHandler();
-
     void getAll();
     void addOne(DataStruct data);
+    void deleteOne(DataStruct data);
+    void updateOne(DataStruct data);
  public slots:
 
     void networkReplyReadyRead();
  signals:
     void sendRes(QString res);
 private :
-    std::string url = "https://newme-ed0c4-default-rtdb.asia-southeast1.firebasedatabase.app/";
+    const std::string url = "https://newme-ed0c4-default-rtdb.asia-southeast1.firebasedatabase.app/";
     QNetworkAccessManager *networkManager ;
     QNetworkReply *networkReply;
 };

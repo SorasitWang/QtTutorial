@@ -37,7 +37,7 @@ void DatabaseHandler::getAll(){
     return ;
 
     QString qurl = QString::fromStdString(url+"test.json");
-    this->networkReply = networkManager->
+    networkReply = networkManager->
             get(QNetworkRequest(QUrl(qurl)));
 
     connect(networkReply,&QNetworkReply::readyRead,this,&DatabaseHandler::networkReplyReadyRead);
@@ -56,4 +56,21 @@ void DatabaseHandler::addOne(DataStruct data){
     qDebug() << jsonDoc;
     networkManager->post(req,jsonDoc.toJson());
 
+}
+void DatabaseHandler::deleteOne(DataStruct data){
+    QNetworkRequest req(QUrl(QString::fromStdString(url+"test.json")));
+    req.setHeader(QNetworkRequest::ContentTypeHeader,QString("application/json"));
+    networkManager->deleteResource(req);
+}
+
+void DatabaseHandler::updateOne(DataStruct data){
+    QVariantMap newOne;
+    QList<QString> keys = data.getKeys();
+    for(int i=0;i<keys.size();i++){
+        newOne[keys[i]] = data.getValue(keys[i]);
+    }
+    QJsonDocument jsonDoc = QJsonDocument::fromVariant(newOne);
+    QNetworkRequest req(QUrl(QString::fromStdString(url+"test.json")));
+    req.setHeader(QNetworkRequest::ContentTypeHeader,QString("application/json"));
+    networkManager->put(req,jsonDoc.toJson());
 }
