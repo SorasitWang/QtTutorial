@@ -7,7 +7,7 @@ Calendar::Calendar(QWidget *parent,Ui::HomePage *u,EditPage *e) :
     QWidget(parent),
     ui(u),editPage(e)
 {
-    ui->calendarWidget->setFixedWidth(ui->tabWidget->height()/1.63);
+    ui->calendarWidget->setFixedWidth(ui->tabWidget->height()/1.9);
       ui->showMonth->setAlignment(Qt::AlignTop);
       ui->showMonth->setSpacing(0);
 

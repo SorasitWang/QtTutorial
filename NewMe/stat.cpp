@@ -75,7 +75,7 @@ Stat::Stat(Ui::HomePage *u):
     //axisY->setLabelFormat("%.1f  ");
     //barChart->axes(Qt::Vertical).at(0)->setRange(0.0f,100.0f);
     //label,series
-   // barChart->addAxis(axis,Qt::AlignLeft);
+    barChart->addAxis(axis,Qt::AlignLeft);
     barChart->addSeries(barSeries);
     barChart->legend()->setVisible(false);
 
@@ -107,7 +107,7 @@ void Stat::update(QList<DataStruct> listData){
     //pie chart
     pieSeries->clear();
     for (int i=0;i<cat.keys().size();i++){
-        pieSeries->append(cat.keys()[i],cat[cat.keys()[i]].first);
+        pieSeries->append(cat.keys()[i] + " " + QString::number(cat[cat.keys()[i]].first),cat[cat.keys()[i]].first);
         QPieSlice *slice = pieSeries->slices().at(i);
         slice->setLabelVisible();
         slice->setLabelFont(*label);
@@ -121,6 +121,7 @@ void Stat::update(QList<DataStruct> listData){
     barChart->removeAxis(axis);
     QStringList labelAxis;
     QList<QBarSet*> lBarSet;
+    int maximum = 0;
     //barSeries->clear();
     QBarSet *max = new QBarSet("MAX");
    // max->set
@@ -132,6 +133,7 @@ void Stat::update(QList<DataStruct> listData){
         lBarSet.append(new QBarSet(cat.keys()[i]));
         for (int j=0;j<cat.keys().size();j++){
             int val = int(cat[cat.keys()[i]].second / cat[cat.keys()[i]].first);
+            if (val>maximum) maximum = val;
             if (i==j)lBarSet[i]->append(val);
             else lBarSet[i]->append(0);
         }
@@ -144,12 +146,12 @@ void Stat::update(QList<DataStruct> listData){
     //create series*/
     //barChart->createDefaultAxes();
     //barChart->setAxisY(axis,barSeries);
-    //QValueAxis *axisY = new QValueAxis();
-   //axisY->setRange(0,100);
+    QValueAxis *axisY = new QValueAxis();
+   axisY->setRange(0,maximum);
    //axisY->setMax(100);
-   //barChart->addAxis(axisY, Qt::AlignBottom);
+   barChart->addAxis(axisY, Qt::AlignBottom);
    //barSeries->attachAxis(axisY);
-    //barChart->addAxis(axis,Qt::AlignLeft);
+    barChart->addAxis(axis,Qt::AlignLeft);
     //barSeries->attachAxis(axis);
     barChart->addSeries(barSeries);
 

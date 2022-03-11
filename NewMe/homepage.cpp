@@ -32,7 +32,7 @@ HomePage::HomePage(QWidget *parent) :
     QPushButton *addNew = new QPushButton("Empty");
     this->db->getAll();
     this->fetchDataFromDb(showData);
-    showData->addWidget(addNew);
+    showData->insertWidget(0,addNew);
     showData->setAlignment(Qt::AlignTop);
     showData->setSpacing(0);
     ui->scrollAreaWidgetContents_6->setLayout(showData);
@@ -165,19 +165,23 @@ void HomePage::receiveRes(QString res){
             id = id.remove(0,2);
         }
         this->listData.append(newData);
+        this->filteredData.append(newData);
         tmpData->append(newData);
-        //addOne(newData);
+        addOne(newData,j-1);
         listData[newData.deadline] = newData;
     }
 
     //filtering
+    //ui->filterSort->setCurrentText(nullptr);
+    //ui->filterType->setCurrentText(nullptr);
+
     //filtering(*tmpData);
     /*for (int i=0;i<this->filteredData.size();i++){
 
         addOne(this->filteredData.at(i),i);
     }*/
     this->cal->update(listData);
-    //this->stat->update(listData.values());
+    this->stat->update(listData.values());
     //this->stat->update(listData.values());
 
 }
