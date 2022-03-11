@@ -79,11 +79,17 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
-            <widget class="QCheckBox" name="sortBy">
+            <widget class="QLabel" name="label">
              <property name="text">
-              <string>Ascending</string>
+              <string>Sort By</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="filterSort"/>
            </item>
            <item>
             <spacer name="horizontalSpacer_7">
@@ -99,17 +105,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QRadioButton" name="sortBy">
              <property name="text">
-              <string>Sort By</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <string>Ascending</string>
              </property>
             </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="fileterSort"/>
            </item>
           </layout>
          </item>
@@ -126,7 +126,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="filterType"/>
+            <widget class="QComboBox" name="filterType">
+             <property name="currentText">
+              <string/>
+             </property>
+            </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer_6">
@@ -269,7 +273,7 @@ background-color: rgb(243, 243, 243);</string>
              <rect>
               <x>130</x>
               <y>50</y>
-              <width>141</width>
+              <width>174</width>
               <height>111</height>
              </rect>
             </property>

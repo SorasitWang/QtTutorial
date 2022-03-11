@@ -13,6 +13,7 @@ struct DataStruct{
     QString type;
     QDate created;
     QDate deadline;
+    QString sort;
     int percent;
 
     static QList<QString> getKeys(){
@@ -57,6 +58,16 @@ struct DataStruct{
         if (QString::compare(key,"deadline")==0) return deadline.toString("dd.MM.yyyy");
         if (QString::compare(key,"percent")==0) return QString::number(percent);
     }
+
+    bool operator<(const DataStruct& a) const
+       {
+        if (sort=="Progress")
+           return percent < a.percent;
+        if (sort=="Name")
+             return title < a.title;
+        if (sort=="Deadline")
+             return deadline < a.deadline;
+       }
 };
 
 class DatabaseHandler : public QObject
@@ -69,6 +80,7 @@ public:
     void addOne(DataStruct data);
     void deleteOne(DataStruct data);
     void updateOne(DataStruct data);
+
  public slots:
 
     void networkReplyReadyRead();
@@ -78,6 +90,7 @@ private :
     const std::string url = "https://newme-ed0c4-default-rtdb.asia-southeast1.firebasedatabase.app/";
     QNetworkAccessManager *networkManager ;
     QNetworkReply *networkReply;
+    QList<QString> types;
 };
 
 #endif // DATABASEHANDLER_H

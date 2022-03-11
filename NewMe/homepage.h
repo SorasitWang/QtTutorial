@@ -32,10 +32,19 @@ private:
     QString selectedData;
     QTextCharFormat *highlight;
     QVector<DataStruct> listData ;
+     QVector<DataStruct> filteredData ;
+    QVector<QWidget*> scrollWidgets;
     QVBoxLayout *showData;
     DatabaseHandler *db;
-    void addOne(DataStruct data);
+    static bool (HomePage::*func)(const DataStruct&,const DataStruct&);
+
+    void addOne(DataStruct data,int i);
     void fetchDataFromDb(QVBoxLayout *showData);
+    void filtering(QVector<DataStruct> tmpData);
+    bool compareByDeadline( const DataStruct &a,const DataStruct &b);
+    bool compareByProgress(const DataStruct &a,const DataStruct &b);
+    bool compareByName(const DataStruct &a,const DataStruct &b);
+
 
     int num=0;
 
@@ -49,6 +58,8 @@ private slots:
     void cancel();
     void ok();
     void changeType(QString txt);
+    void updateFilter(QString selected);
+    void updateFilter();
 
 };
 

@@ -31,6 +31,7 @@ private :
        void initBtn(DataStruct data,int idx);
 private slots:
        void change();
-   };
+
+};
 
    #endif // CALENDAR_H

@@ -12,6 +12,7 @@
 #include <editpage.h>
 #include <QTextCharFormat>
 #include <QString>
+#include <Qstring>
 
 
 
@@ -39,8 +40,13 @@ HomePage::HomePage(QWidget *parent) :
     this->highlight = new QTextCharFormat();
     this->highlight->setUnderlineStyle(QTextCharFormat::SingleUnderline);
 
+    ui->filterType->addItem("Healthy");
+    ui->filterType->addItem("Study");
+    ui->filterType->addItem("Money");
 
-
+    ui->filterSort->addItem("Name");
+    ui->filterSort->addItem("Deadline");
+    ui->filterSort->addItem("Progress");
 
 
     connect(addNew,SIGNAL(clicked()),this,SLOT(createNew()));
@@ -48,6 +54,9 @@ HomePage::HomePage(QWidget *parent) :
     connect(ui->cancel,SIGNAL(released()),this,SLOT(cancel()));
     connect(ui->ok,SIGNAL(released()),this,SLOT(ok()));
     connect(ui->type,SIGNAL(currentTextChanged(QString)),this,SLOT(changeType(QString)));
+    connect(ui->sortBy,SIGNAL(clicked()),this,SLOT(updateFilter()));
+    connect(ui->filterType,SIGNAL(currentTextChanged(QString)),this,SLOT(updateFilter(QString)));
+    connect(ui->filterSort,SIGNAL(currentTextChanged(QString)),this,SLOT(updateFilter(QString)));
     editPage->setType();
     //connect(ui->slideProgress,SIGNAL(valueChanged(value)),this,SLOT(editProgress(value)));
 
@@ -67,9 +76,9 @@ void HomePage::ok(){
 
 }
 
-void HomePage::addOne(DataStruct data){
+void HomePage::addOne(DataStruct data,int i){
 
-     this->listData.append(data);
+     //this->listData.append(data);
      QPixmap icon("");
      QPushButton *bBtn = new QPushButton();
 
@@ -85,7 +94,7 @@ void HomePage::addOne(DataStruct data){
         daysLeftTxt= QString::number(daysLeft)+QString(" days left");
     QLabel *deadline = new QLabel(daysLeftTxt);
     QPushButton *dataClick = new QPushButton();
-    dataClick->setObjectName(QString::number(listData.size()-1));
+    dataClick->setObjectName(QString::number(i));
     connect(dataClick, SIGNAL(released()), this, SLOT(handleSelect()));
     //QFrame *dataFrame = new QFrame(dataClick);
 
@@ -93,8 +102,8 @@ void HomePage::addOne(DataStruct data){
     percent->setValue(data.percent);
     percent->setTextVisible(false);
     percent->setFixedWidth(150);
-     showData->insertWidget(-1,dataClick);
-
+     showData->addWidget(dataClick);
+    scrollWidgets.append(dataClick);
 
     QGridLayout *layoutData = new QGridLayout(dataClick);
     dataClick->setFixedHeight(100);
@@ -110,7 +119,7 @@ void HomePage::addOne(DataStruct data){
 
 void HomePage::handleSelect(){
     QPushButton *btn = (QPushButton *)sender();
-    this->editPage->change(listData[btn->objectName().toInt()],false);
+    this->editPage->change(filteredData[btn->objectName().toInt()],false);
 }
 
 
@@ -129,6 +138,7 @@ void HomePage::receiveRes(QString res){
      QStringList l = res.split(":{");
      QString id;
     QList<QString> keys = DataStruct::getKeys();
+    QVector<DataStruct> *tmpData = new QVector<DataStruct>();
     QMap<QDate,DataStruct> listData;
     id = l[0].sliced(1,l[0].size()-1);
     qDebug() << l[0]<<"/n";
@@ -154,9 +164,18 @@ void HomePage::receiveRes(QString res){
             id = l[j].sliced(l[j].indexOf("},"),l[j].size()-l[j].indexOf("},"));
             id = id.remove(0,2);
         }
-        addOne(newData);
+        this->listData.append(newData);
+        tmpData->append(newData);
+        //addOne(newData);
         listData[newData.deadline] = newData;
     }
+
+    //filtering
+    //filtering(*tmpData);
+    /*for (int i=0;i<this->filteredData.size();i++){
+
+        addOne(this->filteredData.at(i),i);
+    }*/
     this->cal->update(listData);
     //this->stat->update(listData.values());
     //this->stat->update(listData.values());
@@ -177,4 +196,83 @@ void HomePage::changeType(QString txt){
 }
 void HomePage::cancel(){
     editPage->cancel();
+}
+
+void HomePage::updateFilter(QString selected){
+    updateFilter();
+
+}
+void HomePage::updateFilter(){
+    //ui->sortBy->setChecked(true);
+    qDebug()<<"filtering...";
+    filtering(listData);
+}
+
+void HomePage::filtering(QVector<DataStruct> allData){
+    //ui->filterType->setCurrentText("Money");
+    this->filteredData.clear();
+
+    qDebug()<< allData.size();
+    for (int i=0;i<allData.size();i++){
+       DataStruct data = allData.at(i);
+        data.sort = ui->filterSort->currentText();
+        if (ui->filterType->currentText() == nullptr)
+            this->filteredData.append(data);
+         //qDebug()<< allData.at(i).type << ui->filterType->currentText();
+        else if (data.type == ui->filterType->currentText()){
+            qDebug()<< allData.at(i).title;
+            this->filteredData.append(data);
+        }
+    }
+    //clear layout
+    QLayoutItem *child;
+     while ((child = this->showData->takeAt(1)) != nullptr) {
+
+         delete child->widget(); // delete the widget
+         delete child;   // delete the layout item
+     }
+
+   //sort
+
+
+
+   QString type = ui->filterSort->currentText();
+
+   /*if (type=="Deadline"){
+
+       func = &HomePage::compareByDeadline;
+
+   }
+   else if (type=="Progress"){
+       func = &HomePage::compareByProgress;
+
+   }
+   else {
+       func = &HomePage::compareByName;
+
+   }*/
+   std::sort(this->filteredData.begin(), this->filteredData.end());
+   if (ui->sortBy->isChecked())
+    std::reverse(this->filteredData.begin(), this->filteredData.end());
+   scrollWidgets.clear();
+    for (int i=0;i<this->filteredData.size();i++){
+        qDebug()<<  "add" << this->filteredData.at(i).title;
+        addOne(this->filteredData.at(i),i);
+    }
+
+}
+
+bool HomePage::compareByDeadline(const DataStruct &a,  const DataStruct &b)
+{
+    return a.deadline < b.deadline;
+}
+
+bool HomePage::compareByName(const DataStruct &a, const DataStruct &b)
+{
+    return a.title < b.title;
+}
+
+bool HomePage::compareByProgress(const DataStruct &a, const DataStruct &b)
+{
+    return a.percent < b.percent;
 }
