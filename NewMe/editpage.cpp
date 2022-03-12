@@ -7,7 +7,7 @@ EditPage::EditPage(Ui::HomePage *u,DatabaseHandler *d):
     ui(u),db(d)
 {    
     changeBtnTab();
-
+    setAllVisible(false);
     //this->des = new QLabel("Default");
     //ui->centerLayout->addWidget(this->des);
     //layout->addWidget(new QPushButton());
@@ -19,6 +19,7 @@ EditPage::~EditPage()
 }
 
 void EditPage::change(DataStruct focus,bool isClear){
+    setAllVisible(true);
     now = focus;
     qDebug() << focus.type << focus.title;
     if (!isClear){
@@ -48,10 +49,13 @@ void EditPage::change(DataStruct focus,bool isClear){
 }
 
 void EditPage::createNew(){
+    setAllVisible(true);
     change(DataStruct(),true);
     creating = true;
     changeBtnTab();
     setPercent(0);
+    ui->startDate->setText(QDate::currentDate().toString());
+    ui->dateEdit->setDate(QDate::currentDate());
     //set btn
     //addOne(DataStruct());
     qDebug() << "add";
@@ -103,6 +107,8 @@ void EditPage::cancel(){
         else{
             //delete collection
             changeBtnTab();
+            db->deleteOne(now);
+            db->getAll();
         }
         editing = !editing;
     }
@@ -111,8 +117,10 @@ void EditPage::cancel(){
 
 void EditPage::ok(){
     //add new one to db
+    setNow();
     if (creating){
-
+        db->addOne(now);
+        db->getAll();
         return;
     }
 
@@ -188,4 +196,16 @@ void EditPage::readOnly(bool t){
     }
 }
 
+void EditPage::setNow(){
+    now.title = ui->title->text();
+    now.type = ui->type->currentText();
+    now.deadline = ui->dateEdit->date();
+    now.description = ui->descriptionPlain->toPlainText();
+    now.created = QDate::currentDate();
+    now.percent = ui->progressBar->value();
+}
 
+void EditPage::setAllVisible(bool t){
+   ui->frame->setVisible(t);
+   ui->frame_2->setVisible(t);
+}

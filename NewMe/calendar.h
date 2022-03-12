@@ -19,13 +19,13 @@ class Calendar : public QWidget
 public:
     explicit Calendar(QWidget *parent = nullptr,Ui::HomePage *u = nullptr,EditPage *e = nullptr);
     ~Calendar();
-    void update(QMap<QDate,DataStruct> _listData);
+    void update(QMap<QDate,QVector<DataStruct>> _listData);
        void showDate(QDate date);
        void changeMonth(int month,int year);
 private :
        Ui::HomePage *ui;
        EditPage *editPage;
-       QMap<QDate,DataStruct> listData;
+       QMap<QDate,QVector<DataStruct>> listData;
        QMap<QPair<int,int>,QList<DataStruct>> monthData;
 
        void initBtn(DataStruct data,int idx);

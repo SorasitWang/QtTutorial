@@ -17,12 +17,12 @@ struct DataStruct{
     int percent;
 
     static QList<QString> getKeys(){
-        QList<QString> list = {"id","created","deadline","description","type" ,"title","percent"};
+        QList<QString> list = {"created","deadline","description","percent","title","type"};
 
         return list;
     }
 
-    void setValue(QString _id,QString _deadline,QString _description,QString _type,QString _title,QString _percent,QString _created){
+    void setValue(QString _id,QString _deadline,QString _description,QString _percent,QString _title,QString _type,QString _created){
         title = _title;
         description = _description;
         type = _type;
@@ -31,9 +31,11 @@ struct DataStruct{
 
 
         QList<QString> l = _deadline.split(".");
-        deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+        if (l.size()==3)
+            deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
         l = _created.split(".");
-        created = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+        if (l.size()==3)
+            created = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
 
     }
 
@@ -45,7 +47,8 @@ struct DataStruct{
         percent = _percent.toInt();
 
         QList<QString> l = _deadline.split(".");
-        deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+        if (l.size()==3)
+            deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
         created = QDate::currentDate();
     }
 
@@ -87,7 +90,7 @@ public:
  signals:
     void sendRes(QString res);
 private :
-    const std::string url = "https://newme-ed0c4-default-rtdb.asia-southeast1.firebasedatabase.app/";
+    QString url = "https://newme-ed0c4-default-rtdb.asia-southeast1.firebasedatabase.app/";
     QNetworkAccessManager *networkManager ;
     QNetworkReply *networkReply;
     QList<QString> types;

@@ -50,6 +50,7 @@ private:
 
 
 private slots:
+    void checkDeadline(QDate date);
     void selectDate(QDate date);
     void handleSelect();
     void createNew();

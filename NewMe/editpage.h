@@ -41,6 +41,8 @@ private :
     void on_cancel_clicked();
     void on_ok_clicked();
     void setPercent(int value);
+    void setNow();
+    void setAllVisible(bool t);
 };
 
 #endif // EDITPAGE_H

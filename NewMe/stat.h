@@ -19,7 +19,7 @@ public:
 
     explicit Stat(Ui::HomePage *ui);
     ~Stat();
-    void update(QList<DataStruct> listData);
+    void update(QVector<DataStruct> listData);
 private :
     Ui::HomePage *ui;
     QFont *label;

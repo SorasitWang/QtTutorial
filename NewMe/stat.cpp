@@ -86,12 +86,13 @@ Stat::Stat(Ui::HomePage *u):
    ui->statLayout->addWidget(barChartView);
 }
 
-void Stat::update(QList<DataStruct> listData){
+void Stat::update(QVector<DataStruct> listData){
     QString type;
     int total = listData.size();
     int percent = 0;
     cat.clear();
     for (int i=0;i<total;i++){
+        qDebug()<<listData.at(i).title;
         type = listData.at(i).type;
         percent = listData.at(i).percent;
         if (this->cat.value(type).first == NULL){
@@ -103,7 +104,7 @@ void Stat::update(QList<DataStruct> listData){
             this->cat[type].second += percent;
         }
     }
-
+    qDebug()<<cat;
     //pie chart
     pieSeries->clear();
     for (int i=0;i<cat.keys().size();i++){

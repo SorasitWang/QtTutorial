@@ -30,6 +30,8 @@ HomePage::HomePage(QWidget *parent) :
     db = new DatabaseHandler(this);
     cal = new Calendar(this,ui,new EditPage(ui,db));
     QPushButton *addNew = new QPushButton("Empty");
+    //db->updateOne(DataStruct());
+    //db->deleteOne(DataStruct());
     this->db->getAll();
     this->fetchDataFromDb(showData);
     showData->insertWidget(0,addNew);
@@ -58,6 +60,7 @@ HomePage::HomePage(QWidget *parent) :
     connect(ui->sortBy,SIGNAL(clicked()),this,SLOT(updateFilter()));
     connect(ui->filterType,SIGNAL(currentTextChanged(QString)),this,SLOT(updateFilter(QString)));
     connect(ui->filterSort,SIGNAL(currentTextChanged(QString)),this,SLOT(updateFilter(QString)));
+    connect(ui->dateEdit,SIGNAL(dateChanged(QDate)),this,SLOT(checkDeadline(QDate)));
     editPage->setType();
     //connect(ui->slideProgress,SIGNAL(valueChanged(value)),this,SLOT(editProgress(value)));
 
@@ -142,11 +145,15 @@ void HomePage::selectDate(QDate date){
 }
 
 void HomePage::receiveRes(QString res){
+
+    this->listData.clear();
+    this->filteredData.clear();
      QStringList l = res.split(":{");
      QString id;
     QList<QString> keys = DataStruct::getKeys();
+   // QVector<DataStruct> allData = new QVector<DataStruct>();
     QVector<DataStruct> *tmpData = new QVector<DataStruct>();
-    QMap<QDate,DataStruct> listData;
+    QMap<QDate,QVector<DataStruct>> listData;
     id = l[0].sliced(1,l[0].size()-1);
     qDebug() << l[0]<<"/n";
     int start=0,len=0;
@@ -155,40 +162,46 @@ void HomePage::receiveRes(QString res){
         QStringList dataL;
         qDebug() << l[j]<<"/n";
 
-        for (int i=1;i<keys.size();i++){
+        for (int i=0;i<keys.size();i++){
             start = l[j].indexOf(keys[i]+":") +keys[i].size()+1 ;
             if (i==keys.size()-1)
                 len = l[j].indexOf("}")+1;
             else {
                 len = l[j].indexOf(keys[i+1]+":") ;
             }
+
             dataL.append(l[j].sliced(start,len-1-start));
 
         }
 
         newData.setValue(id,dataL.at(1),dataL.at(2),dataL.at(3),dataL.at(4),dataL.at(5),dataL.at(0));
         if (j!=l.size()-1){
+            //qDebug()<<l << j;
             id = l[j].sliced(l[j].indexOf("},"),l[j].size()-l[j].indexOf("},"));
             id = id.remove(0,2);
         }
         this->listData.append(newData);
         this->filteredData.append(newData);
         tmpData->append(newData);
+
+        qDebug()<<newData.percent;
         addOne(newData,j-1);
-        listData[newData.deadline] = newData;
+        if (listData[newData.deadline].size()==0)
+            listData[newData.deadline] = QVector<DataStruct>();
+        listData[newData.deadline].append(newData);
     }
 
     //filtering
     //ui->filterSort->setCurrentText(nullptr);
     //ui->filterType->setCurrentText(nullptr);
-
+    filtering(*tmpData);
     //filtering(*tmpData);
     /*for (int i=0;i<this->filteredData.size();i++){
 
         addOne(this->filteredData.at(i),i);
     }*/
     this->cal->update(listData);
-    this->stat->update(listData.values());
+    this->stat->update(*tmpData);
     //this->stat->update(listData.values());
 
 }
@@ -287,4 +300,11 @@ bool HomePage::compareByName(const DataStruct &a, const DataStruct &b)
 bool HomePage::compareByProgress(const DataStruct &a, const DataStruct &b)
 {
     return a.percent < b.percent;
+}
+
+void HomePage::checkDeadline(QDate date){
+    if (date <= QDate::currentDate()){
+        ui->dateEdit->setDate(QDate::currentDate());
+       // QMessageBox::warning(this,"Invalid","Invalid deadline!");
+    }
 }

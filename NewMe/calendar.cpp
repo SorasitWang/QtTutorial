@@ -18,7 +18,7 @@ Calendar::Calendar(QWidget *parent,Ui::HomePage *u,EditPage *e) :
 Calendar::~Calendar(){
  delete ui;
 }
-  void Calendar::update(QMap<QDate,DataStruct> _listData){
+  void Calendar::update(QMap<QDate,QVector<DataStruct>> _listData){
       //clear hightlight date
       QMap<QDate, QTextCharFormat> decor = ui->calendarWidget->dateTextFormat();
       QList<QDate> keys = decor.keys();
@@ -34,15 +34,18 @@ Calendar::~Calendar(){
       //rehightlight date
       keys = _listData.keys();
       for (int i=0;i<keys.size();i++){
-          qDebug() << _listData[keys[i]].deadline;
-          ui->calendarWidget->setDateTextFormat(_listData[keys[i]].deadline,*highlight);
+          for (int j=0;j<_listData[keys[i]].size();j++){
+          DataStruct tmp = _listData[keys[i]][j];
+          //qDebug() << tmp.deadline;
+          ui->calendarWidget->setDateTextFormat(tmp.deadline,*highlight);
 
           //add to monthData
-          QPair<int,int> my = QPair<int,int>(_listData[keys[i]].deadline.month(),
-                                             _listData[keys[i]].deadline.year());
+          QPair<int,int> my = QPair<int,int>(tmp.deadline.month(),
+                                             tmp.deadline.year());
           if(!monthData.contains(my))
                monthData[my] = QList<DataStruct>();
           monthData[my].append(_listData[keys[i]]);
+          }
       }
 
       listData = _listData;

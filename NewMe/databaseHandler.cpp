@@ -20,7 +20,8 @@ void DatabaseHandler::networkReplyReadyRead()
         char *before = "\"";
         char *after = "";
         //qDebug() << networkReply->readAll();
-        QString re = networkReply->readAll().replace(before,after);
+        QString re;
+        re = networkReply->readAll().replace(before,after);
 
 
 
@@ -30,13 +31,13 @@ void DatabaseHandler::networkReplyReadyRead()
 void DatabaseHandler::getAll(){
     char *before = "\"";
     char *after = "";
-    QString re = "{\"1\":{\"created\":\"2022.5.3\",\"deadline\":\"2022.10.3\",\"description\":\"for pat1!\",\"type\":\"Money\",\"title\":\"study\",\"percent\":\"55\"},\"-MwQSbfiycW0amw7zHCZ\":{\"created\":\"2022.02.02\",\"deadline\":\"2023.01.01\",\"description\":\"Helloworld\",\"type\":\"Healthy\",\"title\":\"aa\",\"percent\":\"75\"},\"-MwQgJIEAmiMnBbUt6Bt\":{\"created\":\"2022.02.22\",\"deadline\":\"2022.03.03\",\"description\":\"Helloworld\",\"type\":\"Money\",\"title\":\"sos\",\"percent\":\"90\"}}";
+    QString re = "{\"1\":{\"created\":\"2022.5.3\",\"deadline\":\"2022.10.3\",\"description\":\"for pat1!\",\"percent\":55,\"title\":\"study\",\"type\":\"Money\"},\"-MwQSbfiycW0amw7zHCZ\":{\"created\":\"2022.02.02\",\"deadline\":\"2023.01.01\",\"description\":\"Helloworld\",\"percent\":75,\"title\":\"aa\",\"type\":\"Healthy\"},\"-MwQgJIEAmiMnBbUt6Bt\":{\"created\":\"2022.02.22\",\"deadline\":\"2022.03.03\",\"description\":\"Helloworld\",\"percent\":90,\"title\":\"sos\",\"type\":\"Money\"}}";
     re = re.replace(before,after);
-    emit sendRes(re);
+    //emit sendRes(re);
 
-    return ;
+    //return ;
 
-    QString qurl = QString::fromStdString(url+"test.json");
+    QString qurl = url+QString("test.json");
     networkReply = networkManager->
             get(QNetworkRequest(QUrl(qurl)));
 
@@ -51,26 +52,32 @@ void DatabaseHandler::addOne(DataStruct data){
         newOne[keys[i]] = data.getValue(keys[i]);
     }
     QJsonDocument jsonDoc = QJsonDocument::fromVariant(newOne);
-    QNetworkRequest req(QUrl(QString::fromStdString(url+"test.json")));
+    QNetworkRequest req(QUrl(url+QString("test.json")));
     req.setHeader(QNetworkRequest::ContentTypeHeader,QString("application/json"));
     qDebug() << jsonDoc;
     networkManager->post(req,jsonDoc.toJson());
+    connect(networkReply,&QNetworkReply::readyRead,this,&DatabaseHandler::networkReplyReadyRead);
 
 }
 void DatabaseHandler::deleteOne(DataStruct data){
-    QNetworkRequest req(QUrl(QString::fromStdString(url+"test.json")));
+    //data.id = "11";
+    QNetworkRequest req(QUrl(url + QString("test/") + data.id + ".json"));
     req.setHeader(QNetworkRequest::ContentTypeHeader,QString("application/json"));
     networkManager->deleteResource(req);
 }
 
 void DatabaseHandler::updateOne(DataStruct data){
+    /*data.title = "changed";
+    data.percent = 55;
+    data.type = "Money";
+    data.description = "for pat5!";*/
     QVariantMap newOne;
     QList<QString> keys = data.getKeys();
     for(int i=0;i<keys.size();i++){
         newOne[keys[i]] = data.getValue(keys[i]);
     }
     QJsonDocument jsonDoc = QJsonDocument::fromVariant(newOne);
-    QNetworkRequest req(QUrl(QString::fromStdString(url+"test.json")));
+    QNetworkRequest req(QUrl(url+QString("test/1.json")));
     req.setHeader(QNetworkRequest::ContentTypeHeader,QString("application/json"));
     networkManager->put(req,jsonDoc.toJson());
 }
