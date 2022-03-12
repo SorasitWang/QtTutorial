@@ -40,6 +40,7 @@ HomePage::HomePage(QWidget *parent) :
     this->highlight = new QTextCharFormat();
     this->highlight->setUnderlineStyle(QTextCharFormat::SingleUnderline);
 
+    ui->filterType->addItem("All");
     ui->filterType->addItem("Healthy");
     ui->filterType->addItem("Study");
     ui->filterType->addItem("Money");
@@ -81,10 +82,16 @@ void HomePage::addOne(DataStruct data,int i){
      //this->listData.append(data);
      QPixmap icon("");
      QPushButton *bBtn = new QPushButton();
-
+    QFont *titleF = new QFont();
+    titleF->setBold(true);
+    titleF->setPointSize(20);
+     QFont *typeF = new QFont();
+     typeF->setItalic(true);
+     typeF->setPointSize(13);
     QLabel *title = new QLabel(data.title);
     QLabel *type = new QLabel(data.type);
-
+    title->setFont(*titleF);
+    type->setFont(*typeF);
     QDate now =  QDate::currentDate();
     int daysLeft = now.daysTo(data.deadline);
     QString daysLeftTxt ;
@@ -106,7 +113,7 @@ void HomePage::addOne(DataStruct data,int i){
     scrollWidgets.append(dataClick);
 
     QGridLayout *layoutData = new QGridLayout(dataClick);
-    dataClick->setFixedHeight(100);
+    dataClick->setFixedHeight(75);
     layoutData->addWidget(title,0,0);
     layoutData->addWidget(percent,1,1);
     layoutData->addWidget(type,1,0);
@@ -220,7 +227,7 @@ void HomePage::filtering(QVector<DataStruct> allData){
     for (int i=0;i<allData.size();i++){
        DataStruct data = allData.at(i);
         data.sort = ui->filterSort->currentText();
-        if (ui->filterType->currentText() == nullptr)
+        if (ui->filterType->currentText() == "All")
             this->filteredData.append(data);
          //qDebug()<< allData.at(i).type << ui->filterType->currentText();
         else if (data.type == ui->filterType->currentText()){
@@ -259,6 +266,7 @@ void HomePage::filtering(QVector<DataStruct> allData){
    if (ui->sortBy->isChecked())
     std::reverse(this->filteredData.begin(), this->filteredData.end());
    scrollWidgets.clear();
+   ui->showTotal->setText("Total : "+QString::number(filteredData.size()));
     for (int i=0;i<this->filteredData.size();i++){
         qDebug()<<  "add" << this->filteredData.at(i).title;
         addOne(this->filteredData.at(i),i);

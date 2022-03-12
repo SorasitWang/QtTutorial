@@ -146,7 +146,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="showTotsl">
+            <widget class="QLabel" name="showTotal">
              <property name="text">
               <string>Total : </string>
              </property>
@@ -456,19 +456,6 @@ background-color: rgb(243, 243, 243);</string>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QPushButton" name="ok">
                <property name="text">
                 <string>PushButton</string>
@@ -514,11 +501,11 @@ background-color: rgb(243, 243, 243);</string>
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
-          <string>Tab 1</string>
+          <string>Stat</string>
          </attribute>
          <widget class="QWidget" name="verticalLayoutWidget_6">
           <property name="geometry">
@@ -534,7 +521,7 @@ background-color: rgb(243, 243, 243);</string>
         </widget>
         <widget class="QWidget" name="tab_2">
          <attribute name="title">
-          <string>Tab 2</string>
+          <string>Calendar</string>
          </attribute>
          <widget class="QWidget" name="verticalLayoutWidget">
           <property name="geometry">

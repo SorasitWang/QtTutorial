@@ -35,7 +35,10 @@ void EditPage::change(DataStruct focus,bool isClear){
     ui->type->setCurrentText(focus.type);
     ui->startDate->setText(focus.created.toString());
     ui->dateEdit->setDate(focus.deadline);
-
+    if (focus.deadline.daysTo(QDate::currentDate()) > 0)
+        ui->ok->setDisabled(true);
+    else
+        ui->ok->setDisabled(false);
     ui->descriptionPlain->setPlainText(focus.description);
 
 
@@ -55,6 +58,9 @@ void EditPage::createNew(){
 }
 
 void EditPage::changeBtnTab(){
+    //ui->btnTab->removeItem(ui->horizontalSpacer);
+    //ui->ok->setDisabled(true);
+    //ui->btnTab->removeWidget(ui->ok);
     if (creating){
        ui->ok->setText("Add");
        ui->cancel->setText("Clear");
@@ -136,6 +142,7 @@ void EditPage::on_ok_clicked()
 }
 
 void EditPage::setType(){
+
     ui->type->addItem("Healthy");
     ui->type->addItem("Study");
     ui->type->addItem("Money");

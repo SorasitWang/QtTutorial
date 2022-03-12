@@ -40,7 +40,7 @@ Stat::Stat(Ui::HomePage *u):
 
     pieChart = new QChart();
     pieChart->addSeries(pieSeries);
-    pieChart->setTitle("What Mek ate this week");
+    pieChart->setTitle("Categorize by type");
     pieChart->legend()->hide();
 
     pieChartView = new QChartView(pieChart);
@@ -56,8 +56,8 @@ Stat::Stat(Ui::HomePage *u):
     barSeries = new QHorizontalStackedBarSeries();
     //create chart
     barChart = new QChart();
+    barChart->setTitle("Total progress");
    // barChart->addSeries(barSeries);
-    barChart->setTitle("Progress");
     barChart->setAnimationOptions(QChart::AllAnimations);
 
     //QValueAxis *axisY = new QValueAxis();
