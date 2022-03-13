@@ -126,6 +126,8 @@ void EditPage::ok(){
 
     if (editing){
         //update to db
+        db->updateOne(now);
+        db->getAll();
     }
     else{
         //change ui to edit mode

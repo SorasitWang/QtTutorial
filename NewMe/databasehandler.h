@@ -32,10 +32,10 @@ struct DataStruct{
 
         QList<QString> l = _deadline.split(".");
         if (l.size()==3)
-            deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+            deadline = QDate(l[2].toInt(),l[1].toInt(),l[0].toInt());
         l = _created.split(".");
         if (l.size()==3)
-            created = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+            created = QDate(l[0].toInt(),l[1].toInt(),l[0].toInt());
 
     }
 
@@ -48,7 +48,7 @@ struct DataStruct{
 
         QList<QString> l = _deadline.split(".");
         if (l.size()==3)
-            deadline = QDate(l[0].toInt(),l[1].toInt(),l[2].toInt());
+            deadline = QDate(l[2].toInt(),l[1].toInt(),l[1].toInt());
         created = QDate::currentDate();
     }
 
@@ -66,9 +66,9 @@ struct DataStruct{
        {
         if (sort=="Progress")
            return percent < a.percent;
-        if (sort=="Name")
+        else if (sort=="Name")
              return title < a.title;
-        if (sort=="Deadline")
+        else // (sort=="Deadline")
              return deadline < a.deadline;
        }
 };

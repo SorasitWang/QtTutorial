@@ -2,7 +2,6 @@
 #ifndef EDITPAGE_H
 #define EDITPAGE_H
 #include "ui_homepage.h"
-//#include "HomePage.h"
 #include <QLabel>
 #include <QPushButton>
 #include <QWidget>

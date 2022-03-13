@@ -23,7 +23,7 @@ void DatabaseHandler::networkReplyReadyRead()
         QString re;
         re = networkReply->readAll().replace(before,after);
 
-
+        qDebug() << re;
 
         emit sendRes(re);
 }

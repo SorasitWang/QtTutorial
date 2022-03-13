@@ -20,6 +20,7 @@ Calendar::~Calendar(){
 }
   void Calendar::update(QMap<QDate,QVector<DataStruct>> _listData){
       //clear hightlight date
+      this->monthData.clear();
       QMap<QDate, QTextCharFormat> decor = ui->calendarWidget->dateTextFormat();
       QList<QDate> keys = decor.keys();
       QTextCharFormat *normal = new QTextCharFormat();
@@ -36,7 +37,7 @@ Calendar::~Calendar(){
       for (int i=0;i<keys.size();i++){
           for (int j=0;j<_listData[keys[i]].size();j++){
           DataStruct tmp = _listData[keys[i]][j];
-          //qDebug() << tmp.deadline;
+          qDebug() << tmp.title;
           ui->calendarWidget->setDateTextFormat(tmp.deadline,*highlight);
 
           //add to monthData
@@ -44,7 +45,7 @@ Calendar::~Calendar(){
                                              tmp.deadline.year());
           if(!monthData.contains(my))
                monthData[my] = QList<DataStruct>();
-          monthData[my].append(_listData[keys[i]]);
+          monthData[my].append(tmp);
           }
       }
 
@@ -52,13 +53,20 @@ Calendar::~Calendar(){
       changeMonth(ui->calendarWidget->monthShown(),ui->calendarWidget->yearShown());
   }
 
-  void Calendar::initBtn(DataStruct data,int idx){
+  void Calendar::initBtn(DataStruct data,int idx,QVBoxLayout *sameDayLay){
+      //if (newDate)
+     // *sameDay = new QWidget();
+     // QVBoxLayout *sameDayLay = new QVBoxLayout(sameDay);
+      //QLabel *labelDay = new QLabel(data.deadline.toString());
       QPushButton *dataClick = new QPushButton();
       QHBoxLayout *lay = new QHBoxLayout(dataClick);
       dataClick->setFixedHeight(30);
       dataClick->setObjectName(data.id+"_"+QString::number(idx));
       lay->addWidget(new QLabel(data.title));
-      ui->showMonth->addWidget(dataClick);
+      //sameDayLay->addWidget(labelDay);
+      sameDayLay->addWidget(dataClick);
+      //ui->showMonth->addWidget(sameDay);
+
       connect(dataClick,SIGNAL(clicked()),this,SLOT(change()));
   }
 
@@ -88,6 +96,7 @@ Calendar::~Calendar(){
       QLayoutItem *child;
       while ((child = ui->showMonth->takeAt(0)) != 0) {
           delete child->widget();
+          delete child;
       }
 
       //if no sol in this month, show "None"
@@ -96,10 +105,49 @@ Calendar::~Calendar(){
           return ;
       }
       //init button in sol list
+      bool createNewDate = true;
       QList<DataStruct> dataM = monthData[QPair<int,int>(m,y)];
+
       for (int i=0;i<dataM.size();i++){
-          initBtn(dataM[i],i);
+          dataM[i].sort = "Deadline";
       }
+      std::sort(dataM.begin(),dataM.end());
+
+      int i = 0;
+      while(i<dataM.size()){
+          qDebug()<<i;
+          //if (i==0 || dataM[i].deadline != dataM[i-1].deadline){
+              QWidget *sameDay = new QWidget();
+              QVBoxLayout *dayLay = new QVBoxLayout(sameDay);
+              dayLay->addWidget(new QLabel(dataM[i].deadline.toString()));
+              ui->showMonth->addWidget(sameDay);
+              initBtn(dataM[i],i,dayLay);
+              i++;
+              while(i<dataM.size() && dataM[i].deadline == dataM[i-1].deadline){
+                initBtn(dataM[i],i,dayLay);
+                i++;
+              }
+
+          //
+      }
+/*      for (int i=0;i<dataM.size();i++){
+
+          else{
+
+          }
+          qDebug()<<dataM[i].title;
+          for (int j=i-1;j>0;j--){
+              if (dataM[j].deadline == dataM[i].deadline){
+                  initBtn(dataM[i],i,true);
+                  createNewDate = false;
+                  break;
+              }
+          }
+          if (createNewDate)
+               initBtn(dataM[i],i,false);
+
+
+      }*/
       //show total sol
       ui->inMonth->setText("Total : "+QString::number(dataM.size()));
 

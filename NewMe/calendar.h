@@ -28,7 +28,7 @@ private :
        QMap<QDate,QVector<DataStruct>> listData;
        QMap<QPair<int,int>,QList<DataStruct>> monthData;
 
-       void initBtn(DataStruct data,int idx);
+       void initBtn(DataStruct data,int idx,QVBoxLayout *sameDayLay);
 private slots:
        void change();
 
